@@ -1,4 +1,4 @@
-# workflow for the quality control and gap-filling of snoTEL data
+# A workflow for the quality control and gap-filling of snoTEL data
 
 This document a describes a workflow that:
 -	Acquires meteorological data from the national oceanographic and atmospheric administration's GHCND (Global Historical Climatology Network Daily) database.
