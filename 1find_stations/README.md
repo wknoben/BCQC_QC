@@ -1,2 +1,5 @@
-# snoTEL_QC
-# snoTEL_QC
+# Find the GHCND ID #s that correspond to snoTEL stations
+
+
+
+
