@@ -4,7 +4,7 @@ This document a describes a workflow that:
 -	Acquires meteorological data from the national oceanographic and atmospheric administration's GHCND (Global Historical Climatology Network Daily) database.
 -	Finds the GHCND ID numbers that correspond to the USDA’s Snow Telemetry Data Collection Network (snoTEL). 
 -	Performs quality control checks and screens snoTEL data according to established methods
--	Concatenates the the QC'd data into a single netCDF file
+-	Concatenates the the data and QC information into a single netCDF file
 -	And uses a random forest machine learning algorithm to infill the missing data.
 
 The workflow can be recreated by following the instructions found within the folders. The workflow accesses folders in the subsequent order:
