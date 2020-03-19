@@ -1,7 +1,7 @@
 # Perform QC on the GHCND data
 Quality control procedures are performed according to global historical climate network daily methods. These methods are described in https://www.ncdc.noaa.gov/ghcn-daily-methods and are also described in greater detail by Durre et al., (2008,2010). Quality control for precipitation is also preformed according to (Beck et al., 2020) and 
 
-The main script QC_main.m. Paths will have to be set to find .mat input files and a gaugeInfo.mat files. 
+The main script QC_main.m. Paths will have to be set to find .mat input files and a gaugeInfo.mat files. QC_gaugeLength.m is a simple script that screens out stations with insufficient data from the gaugeInfo.mat file. 
 
 # References
 
