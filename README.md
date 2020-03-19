@@ -7,8 +7,7 @@ This document a describes a workflow that:
 -	Concatenates the the QC'd data into a single netCDF file
 -	And uses a random forest machine learning algorithm to infill the missing data.
 
-
-The workflow can be recreated by following the instructions found within the folders con. The workflow accesses folders in the subsequent order:
+The workflow can be recreated by following the instructions found within the folders. The workflow accesses folders in the subsequent order:
 1)	1find_stations
 2)	2read_GHCND
 3)	3quality_control
