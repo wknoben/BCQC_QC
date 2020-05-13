@@ -239,7 +239,7 @@ if num75>=3  %%%%% start loop
     Tminnear=nan*ones(length(date),num75);
     Tmaxnear=nan*ones(length(date),num75);
     for i=1:num75
-        filei=[Inpath,'/',ID75{i},'.mat'];
+        filei=[Inpath,'/bcqc_',num2str(ID75{i}),'.mat'];
         load(filei,'data');
         datei=data(:,1);
         [indi1,indi2]=ismember(datei,date);

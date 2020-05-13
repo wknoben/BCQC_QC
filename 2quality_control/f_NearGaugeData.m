@@ -1,7 +1,7 @@
 function pne=f_NearGaugeData(Inpath,IDne,datetar)
 pne=nan*zeros(length(datetar),length(IDne));
 for i=1:length(IDne)
-   file=[Inpath,'/',IDne{i},'.mat'];
+   file=[Inpath,'/bcqc_',num2str(IDne{i}),'.mat'];
    load(file,'data');
    datei=data(:,1);
    [x1,x2]=ismember(datei,datetar);

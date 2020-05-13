@@ -9,10 +9,11 @@
 
 %%%%%%%%%%%%%BCQC
 clc;clear;close all
-Inpath='/Users/cjh458/Desktop/Guoqiang_WF/3quality_control/ghcnd_QC_TP_bcqc';
-filePath='/Users/cjh458/Desktop/Guoqiang_WF/4unify_data/bcqc_UNI';
+Gaugepath='/Users/cjh458/Desktop/BCQC_QC/1read_BCQC';
+Inpath='/Users/cjh458/Desktop/BCQC_QC/2quality_control/QC_TP_bcqc';
+filePath='/Users/cjh458/Desktop/BCQC_QC/3unify_data/bcqc_UNI';
 mkdir(filePath);
-Outfile='/Users/cjh458/Desktop/Guoqiang_WF/4unify_data/bcqc_UNI/AllGauge_QC_bcqc_noflags.nc4';
+Outfile='/Users/cjh458/Desktop/BCQC_QC/3unify_data/bcqc_UNI/AllGauge_QC_bcqc_noflags.nc4';
 % Outfile='/Users/cjh458/Desktop/Guoqiang_WF/4unify_data/ghcnd_UNI/AllGauge_QC_noflags.nc4';
 
 % mac path
@@ -22,7 +23,7 @@ Outfile='/Users/cjh458/Desktop/Guoqiang_WF/4unify_data/bcqc_UNI/AllGauge_QC_bcqc
 Year=[2017,2018];
 
 % station infomation
-FileInfo=[Inpath,'/gaugeInfo_bcqc.mat'];
+FileInfo=[Gaugepath,'/gaugeInfo_bcqc.mat'];
 % load('/Users/cjh458/Desktop/Guoqiang_WF/3quality_control/gaugeInfo1.mat') %load the most current gaugeInfo.mat file
 load(FileInfo,'ID','LLE');
 nstn=length(ID);
@@ -45,10 +46,10 @@ mflag=single(nan*zeros(nday,nstn));
 for i=1:nstn
     fprintf('reading %d--%d\n',i,nstn);
     load(FileInfo,'ID','LLE');
-    filei=[Inpath,'/',ID{i},'.mat'];
+    filei=[Inpath,'/bcqc_',num2str(ID{i}),'.mat'];
     load(filei);
-    sourceTemp=char(ID1(i));
-    sourcei=ID(1:2);
+    sourceTemp=char(ID1{i});
+    sourcei=ID;%(1:2);
     [datai,qfrawi,qfi,mfi]=f_read(filei,sourcei,date);         
     
     prcp(:,i)=datai(:,1); tmin(:,i)=datai(:,5); tmax(:,i)=datai(:,4);

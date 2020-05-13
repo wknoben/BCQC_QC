@@ -3,14 +3,11 @@ clc;clear;close all
 % Inpath='/home/gut428/GapFill/Data/AllGauge';
 % Outpath='/home/gut428/GapFill/Data/AllGauge_QC';
 % mac path
-% Inpath='/Users/localuser/Research/AllGauge';
-% Outpath='/Users/localuser/Research/AllGauge_QC';
-% Inpath='/Users/cjh458/Desktop/Guoqiang_WF/2read_GHCND/ghcnd_dataMat';
-Inpath='/Users/cjh458/Desktop/Guoqiang_WF/2read_GHCND/bcqc_dataMat';
-Outpath='/Users/cjh458/Desktop/Guoqiang_WF/3quality_control/ghcnd_QC_TP_bcqc';
+Inpath='/Users/cjh458/Desktop/BCQC_QC/1read_BCQC/bcqc_dataMat/';
+Outpath='/Users/cjh458/Desktop/BCQC_QC/2quality_control/QC_TP_bcqc';
 mkdir(Outpath);
 % GaugeInfo0=[Inpath,'/GaugeInfo.mat'];
-load('/Users/cjh458/Desktop/Guoqiang_WF/3quality_control/gaugeInfo_bcqc.mat')
+load('/Users/cjh458/Desktop/BCQC_QC/1read_BCQC/gaugeInfo_bcqc.mat')
 IDall=ID; clear ID
 % copyfile(GaugeInfo0,Outpath);
 % % (1) basic time length and valid data ratio control
@@ -44,12 +41,14 @@ else
 end
 % (3) quality control model
 for i=1:length(IDall)  % 
-    Infile=[Inpath,'/',IDall{i},'.mat'];
-    Outfile=[Outpath,'/',IDall{i},'.mat'];
+    Infile=[Inpath,'/bcqc_',num2str(IDall{i}),'.mat'];
+%     Infile=strcat(Inpath,'/bcqc_',num2str(IDall{i}),'.mat');
+    Outfile=[Outpath,'/bcqc_',num2str(IDall{i}),'.mat'];
+%     Outfile=strcat(Outpath,'/bcqc_',num2str(IDall{i}),'.mat');
     fprintf('Quality control %d--%d\n',i,length(IDall));
     if ~exist(Outfile,'file')
         % read target gauge
-        load(Infile,'data');      
+        load(Infile);      
         date=data(:,1);
         p=data(:,2);
         swe=data(:,3);
@@ -63,10 +62,8 @@ for i=1:length(IDall)  %
         NEcal.IDall=IDall;
         NEcal.Inpath=Inpath;
         
-        % GHCND quality control of precipitation + SWE
+        % GHCND quality control of precipitation
         Qflag_prcp1=f_GHCNDQC_P(p,date,NEcal,Tmean);
-%         Qflag_swe1=f_GHCNDQC_P(swe,date,NEcal,Tmean);
-%         Qflag_snowD1=f_GHCNDQC_P(snowD,date,NEcal,Tmean);
         
         % APHRODITE quality control of precipitation
         temp=IDne_num(i,:); temp(isnan(temp))=[];

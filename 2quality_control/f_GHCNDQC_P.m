@@ -370,7 +370,7 @@ if numnear>0  %%%%% start loop
     ID75=IDall(indnear);
     pnear=nan*ones(length(date),numnear);
     for i=1:numnear
-        filei=[Inpath,'/',ID75{i},'.mat'];
+        filei=[Inpath,'/bcqc_',num2str(ID75{i}),'.mat'];
         load(filei,'data');
         datei=data(:,1);
         [indi1,indi2]=ismember(datei,date);

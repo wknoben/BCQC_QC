@@ -19,11 +19,11 @@ load(filei,'Qflag_prcp1','Qflag_prcp2','Qflag_tmax','Qflag_tmin');
 %     Qflag_prcp2(Qflag_prcp2==34)=0;
 % end
 
-tempind=Qflag_prcp1>0;
-Qflag_prcp1(~tempind)=Qflag_prcp2(~tempind); 
-qfi(ind2,1)=Qflag_prcp1(ind1);
-qfi(ind2,2)=Qflag_tmin(ind1);
-qfi(ind2,3)=Qflag_tmax(ind1);
+% tempind=Qflag_prcp1>0;                       %COmmented this out % 05/13/2020
+% Qflag_prcp1(~tempind)=Qflag_prcp2(~tempind); 
+% qfi(ind2,1)=Qflag_prcp1(ind1);
+% qfi(ind2,2)=Qflag_tmin(ind1);
+% qfi(ind2,3)=Qflag_tmax(ind1);
 
 % quality flags from raw data
 qfraw=f_read_ghcn(filei);
