@@ -2,9 +2,9 @@
 % function Fill_ML()
 stnorder1=1; stnorder2=713;
 % 
-varnames={'tmax','tmin'};
-% varnames={'prcp','tmax','tmin'};
-% 
+varnames={'tmax'};
+% varnames={'prcp','tmin'};
+varnames={'prcp','tmax','tmin'};
 % LSTMflag=0;
 % varnames={varnamein};
 if ischar(stnorder1)
@@ -19,9 +19,9 @@ fprintf('Station order is %d--%d\n',stnorder1,stnorder2);
 
 %0 Basic inputs
 % % Plato
-FileGauge='/Users/cjh458/Desktop/Guoqiang_WF/4unify_data/bcqc_UNI/AllGauge_QC_bcqc_noflags.nc4';
+FileGauge='/Users/cjh458/Desktop/BCQC_QC/3unify_data/bcqc_UNI/AllGauge_QC_bcqc_noflags.nc4';
 % output files
-Outpath='/Users/cjh458/Desktop/Guoqiang_WF/7GapFill_forChristian/';
+Outpath='/Users/cjh458/Desktop/BCQC_QC/4Gap_filling/GF/';
 
 %1 Basic settings
 Validnum.all=0;  % the least number of valid samples for each station and each variable to be included in the gap filling process
@@ -29,20 +29,6 @@ Validnum.month=0;  % the least number of valid samples for each month
 radius=4000; % searching the nearest neightboring stations within the radius
 leastne=0; % the least number of nearest gauges that is required to fill the target gauge
 
-%3 Calculate the CC between station data and reanalysis data
-% CCreaall=cell(length(varnames),1);
-% for vv=1:length(varnames)
-%     varvv=varnames{vv};
-%     filevv=['CCrea_',varvv,'.mat'];
-%     if exist(filevv,'file')
-%         load(filevv,'CCrea');
-%     else
-%         CCrea=f_CCrea(FileGauge,FileRea,varvv);
-%         save(filevv,'CCrea');
-%     end
-%     CCreaall{vv}=CCrea;
-%     clear CCrea
-% end
 
 %4 for each station, calculate the index nearest neighbor stations
 %this step takes much time
@@ -123,7 +109,7 @@ for i=1:gnum
     disi=zeros(gnum,2);
     disi(:,1)=IDnum;
     disi(:,2)=f_lldistkm(lat(i),lon(i),lat,lon);
-    disi(i,2)=100000;
+%     disi(i,2)=100000;
     % exclude too far gagues
     disi(disi(:,2)>radius|isnan(disi(:,2)),:)=[];
     IDne=disi(:,1);
@@ -136,12 +122,34 @@ for i=1:gnum
         dg=[vne(:,in),vtar];
         dg(isnan(dg(:,1))|isnan(dg(:,2)),:)=[];
         if size(dg,1)>overyear*365
-            CCne(in)=corr(dg(:,1),dg(:,2),'Type',CCtype);
+%             CCne(in)=1-((dg(:,1)-dg(:,2)).^2 / (dg(:,1)-mean(dg(:,2))).^2);
+%             CCne(in)=corrcoef(dg(:,1),dg(:,2));
+            if strcmp(varvv,'tmin')
+                CCne(in)=1-(sum((dg(:,1)-dg(:,2)).^2)/sum((dg(:,1)-mean(dg(:,1))).^2));       % Nash-sutcliff efficiency
+            end
+            if strcmp(varvv,'tmax')
+                CCne(in)=1-(sum((dg(:,1)-dg(:,2)).^2)/sum((dg(:,1)-mean(dg(:,1))).^2));       % Nash-sutcliff efficiency
+            end
+            if strcmp(varvv,'prcp')
+                Obs=dg(:,1);
+                Pre=dg(:,2);
+                pre_mean = nanmean(Pre);
+                obs_mean = nanmean(Obs);
+                r = nansum((Pre - pre_mean) .* (Obs - obs_mean)) / sqrt(nansum((Pre - pre_mean).^2).*nansum((Obs - obs_mean).^2));
+                gamma = (std(Pre)/pre_mean) / (std(Obs) / obs_mean);
+                beta = nanmean(Pre)/nanmean(Obs);
+                KGE = 1 - sqrt((r - 1)^2 + (gamma - 1)^2 + (beta - 1)^2);
+                CCne(in)=KGE;
+            end
+            
+            if (isnan(CCne(in))==1)
+                CCne(in)=0;
+            end
         end
     end
     
     % exclude some stations
-    indi=CCne<-1 | isnan(CCne);
+    indi=CCne<-1000 | isnan(CCne);
     disi(indi,:)=[];
     CCne(indi)=[];
     numne=length(CCne);

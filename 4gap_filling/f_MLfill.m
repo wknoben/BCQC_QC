@@ -11,8 +11,9 @@ for i=1:numcomb % combination loop
     %%%% insert control procedure -C.Hart
     len=length(combi)-size(xdata,2); % Calculate the difference in length between these two time-series
     if len>0   %if the length of combi is longer than xdatai
+        lencombi=length(combi);
         for ii=1:len %iterate through the length of the time differnece between combi and xdatai
-            combi(length(combi)-(ii-1))=[]; %remove the extra vaules from combi
+            combi(lencombi-(ii-1))=[]; %remove the extra vaules from combi
         end %end for loop
     end  %end if loop
     xdatai=xdata(:,combi);

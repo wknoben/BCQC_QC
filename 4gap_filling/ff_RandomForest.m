@@ -1,4 +1,5 @@
 function [Msim,KGEtrain,KGEreco]=ff_RandomForest(Xtrain,Ytrain,Xcomplete,varvv)
+
 % Xtrain: [samples,variables]
 rng(1,'twister');
 normalize=false;
@@ -45,8 +46,17 @@ if strcmp(varvv,'prcp')
     Mtest(Mtest<0)=0;
     Msim(Msim<0)=0;
 end
-
-KGEtrain=ff_KGE(Ytrain,Mtrain); KGEtrain=KGEtrain(1);
-KGEreco=ff_KGE(Ytest,Mtest); KGEreco=KGEreco(1);  % this is only test KGE. refer to as KGEreco to be consistent with outputs
+if strcmp(varvv,'prcp')
+    KGEtrain=ff_KGE(Ytrain,Mtrain); KGEtrain=KGEtrain(1);
+    KGEreco=ff_KGE(Ytest,Mtest); KGEreco=KGEreco(1);  % this is only test KGE. refer to as KGEreco to be consistent with outputs
+end
+if strcmp(varvv,'tmin')
+    KGEtrain=1-(sum(Ytrain-Mtrain).^2)/sum((Ytrain-mean(Mtrain)).^2);
+    KGEreco=0.5;1-(sum(Ytest-Mtest).^2)/sum((Ytest-mean(Mtest)).^2);
+end
+if strcmp(varvv,'tmax')
+    KGEtrain=1-(sum(Ytrain-Mtrain).^2)/sum((Ytrain-mean(Mtrain)).^2);
+    KGEreco=0.5;1-(sum(Ytest-Mtest).^2)/sum((Ytest-mean(Mtest)).^2);
+end
 end
 

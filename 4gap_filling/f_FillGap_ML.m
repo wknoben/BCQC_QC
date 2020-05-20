@@ -26,7 +26,7 @@ indexfill=samnum1>=Validnum.all;
 data_stn(:,~indexfill)=nan;
 
 %3. initialization of outputs
-for gg=stnorder(1)+1:stnorder(2)
+for gg=stnorder(1):stnorder(2)
     fprintf('Filling: %s--current %d--total %d\n',varvv,gg,stnorder(2));
     IDgg=ID(gg,:); LLEgg=LLE(gg,:);
     outfilegg=[OutpathFillvv,'/',num2str(gg),'.mat'];
@@ -72,18 +72,26 @@ for gg=stnorder(1)+1:stnorder(2)
     temp=isnan(data_stngg);  % Find where the nans are that are intended to be filled
     nans=find(temp==1);  % Calculate the time location of these nans
     
-    for ii=1:size(xdata,2)  % Iterate through the nearest stations        
-         tempX=isnan(xdata(:,ii)); % and find where the nans of those stations
-         valid(ii)=sum(tempX(nans)); % overlap with that nans in the current station  
-    end
-    rmStation=find(valid>0); % Convert these overlapping time-series to an integer 
-    xdata(:,rmStation)=[]; % Remove the overlapping stations from the xdata variable
-    
+%     for ii=1:size(xdata,2)  % Iterate through the nearest stations        
+%          tempX=isnan(xdata(:,ii)); % and find where the nans of those stations
+%          valid(ii)=sum(tempX(nans)); % overlap with that nans in the current station  
+%     end
+%     rmStation=find(valid>0); % Convert these overlapping time-series to an integer 
+%     xdata(:,rmStation)=[]; % Remove the overlapping stations from the xdata variable
+%     
     % estimate
     VarFill_RF=f_MLfill(xdata,ydata,xcomb,varvv);
     VarFill_RF=VarFill_RF(:,1);
     % evaluate
     KGEFill_RF=ff_KGE(data_stngg,VarFill_RF);
+        
+    if strcmp(varvv,'tmin')
+        KGEFill_RF(1,1)=1-((nansum(data_stngg-VarFill_RF).^2)/nansum((data_stngg-nanmean(VarFill_RF)).^2));
+    end
+    
+    if strcmp(varvv,'tmax')
+        KGEFill_RF(1,1)=1-((nansum(data_stngg-VarFill_RF).^2)/nansum((data_stngg-nanmean(VarFill_RF)).^2));
+    end
     
     NumComb=size(xcomb,1);
     save(outfilegg,'VarFill_RF','KGEFill_RF','IDgg','LLEgg','gg','data_stngg','NumComb','-v7.3');

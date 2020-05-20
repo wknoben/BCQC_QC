@@ -1,9 +1,9 @@
 % function Fill_ML(stnorder1,stnorder2,varnamein)
 % function Fill_ML()
-stnorder1=1; stnorder2=732;
+stnorder1=1; stnorder2=713;
 % 
-varnames={'tmin'};
-% varnames={'prcp','tmax','tmin'};
+% varnames={'tmax','tmin'};
+varnames={'prcp','tmax','tmin'};
 % 
 % LSTMflag=0;
 % varnames={varnamein};
@@ -19,30 +19,15 @@ fprintf('Station order is %d--%d\n',stnorder1,stnorder2);
 
 %0 Basic inputs
 % % Plato
-FileGauge='/Users/cjh458/Desktop/Guoqiang_WF/4unify_data/ghcnd_UNI/AllGauge_QC.nc4';
+FileGauge='/Users/cjh458/Desktop/BCQC_QC/3unify_data/bcqc_UNI/AllGauge_QC_bcqc_noflags.nc4';
 % output files
-Outpath='/Users/cjh458/Desktop/Guoqiang_WF/7GapFill_forChristian/';
+Outpath='/Users/cjh458/Desktop/BCQC_QC/4GapFill_forChristian/';
 
 %1 Basic settings
 Validnum.all=0;  % the least number of valid samples for each station and each variable to be included in the gap filling process
 Validnum.month=0;  % the least number of valid samples for each month
 radius=4000; % searching the nearest neightboring stations within the radius
 leastne=0; % the least number of nearest gauges that is required to fill the target gauge
-
-%3 Calculate the CC between station data and reanalysis data
-% CCreaall=cell(length(varnames),1);
-% for vv=1:length(varnames)
-%     varvv=varnames{vv};
-%     filevv=['CCrea_',varvv,'.mat'];
-%     if exist(filevv,'file')
-%         load(filevv,'CCrea');
-%     else
-%         CCrea=f_CCrea(FileGauge,FileRea,varvv);
-%         save(filevv,'CCrea');
-%     end
-%     CCreaall{vv}=CCrea;
-%     clear CCrea
-% end
 
 %4 for each station, calculate the index nearest neighbor stations
 %this step takes much time
@@ -56,7 +41,7 @@ for vv=1:length(varnames)
     IDne_num{vv}=IDne_numv;
     clear IDne_numv
 end
-% load('/Users/cjh458/Desktop/Guoquiang_WF/3quality_control/IDne_num.mat')
+% load('/Users/cjh458/Desktop/BCQC_QC/2quality_control/IDne_num.mat')
 
 %6 for each station, fill the gap
 for vv=1:length(varnames)
@@ -136,7 +121,7 @@ for i=1:gnum
         dg=[vne(:,in),vtar];
         dg(isnan(dg(:,1))|isnan(dg(:,2)),:)=[];
         if size(dg,1)>overyear*365
-            CCne(in)=corr(dg(:,1),dg(:,2),'Type',CCtype);
+            CCne(in)=corr(dg(:,1),dg(:,2));
         end
     end
     
