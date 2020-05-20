@@ -13,7 +13,7 @@ tmin_qf=tmin_qfraw;
 tmax_qf=tmax_qfraw;
 prcp_qf=prcp_qfraw;
 
-load('/Users/cjh458/Desktop/Guoqiang_WF/3quality_control/gaugeInfo1.mat') %set this path == to the most recent gaugeInfo.mat file
+load('/Users/cjh458/Desktop/BCQC_QC/1read_BCQC/gaugeInfo_bcqc.mat') %set this path == to the most recent gaugeInfo.mat file
 % ID from cell to char
 IDstr=cell2mat(ID);
 
@@ -23,7 +23,7 @@ nstn=size(IDstr,1);
 nchar=size(IDstr,2);
 
 % write basic infomation
-nccreate(Outfile,'ID','Datatype','char','Dimensions',{'nstn',nstn,'nchar',nchar},'Format','netcdf4','DeflateLevel',9);
+nccreate(Outfile,'ID','Datatype','double','Dimensions',{'nstn',length(IDstr)},'Format','netcdf4','DeflateLevel',9);
 ncwrite(Outfile,'ID',IDstr);
 ncwriteatt(Outfile,'ID','description','station IDs');
 ncwriteatt(Outfile,'ID','Char1-2','station source. GH: ghcn-d merge');
